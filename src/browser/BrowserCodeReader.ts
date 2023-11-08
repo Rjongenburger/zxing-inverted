@@ -934,7 +934,7 @@ export class BrowserCodeReader {
     mediaElement: HTMLVisualMediaElement
   ): BinaryBitmap {
     const ctx = this.getCaptureCanvasContext(mediaElement);
-    if(mediaElement instanceof HTMLVideoElement) {
+    if (mediaElement instanceof HTMLVideoElement) {
       this.drawFrameOnCanvas(<HTMLVideoElement>mediaElement);
     } else {
       this.drawImageOnCanvas(<HTMLImageElement>mediaElement);
@@ -942,7 +942,7 @@ export class BrowserCodeReader {
     const canvas = this.getCaptureCanvas(mediaElement);
 
     const luminanceSource = new HTMLCanvasElementLuminanceSource(canvas);
-    const hybridBinarizer = new HybridBinarizer(luminanceSource);
+    const hybridBinarizer = new HybridBinarizer(luminanceSource.invert());
 
     return new BinaryBitmap(hybridBinarizer);
   }
@@ -955,7 +955,9 @@ export class BrowserCodeReader {
       const elem = this.getCaptureCanvas(mediaElement);
       let ctx;
       try {
-        ctx = elem.getContext('2d', {willReadFrequently: true}) as CanvasRenderingContext2D;
+        ctx = elem.getContext('2d', {
+          willReadFrequently: true,
+        }) as CanvasRenderingContext2D;
       } catch (e) {
         ctx = elem.getContext('2d');
       }
